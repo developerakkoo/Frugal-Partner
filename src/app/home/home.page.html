@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Category
+    </ion-title>
+    <ion-button (click)="openPage('add-category')" fill="clear" slot="end">
+      <ion-icon slot="icon-only" name="add"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="w3-container">
+    <table class="w3-table-all">
+      <tr>
+        <th>Category</th>
+        <th>Vehicle Image</th>
+        <th>Capacity/Facility</th>
+        <th>Model</th>
+        <th>Rates</th>
+        <th>Monthly Subscription</th>
+        <th>Actions</th>
+      </tr>
+
+      <tr *ngFor="let cat of categories">
+        <td> {{cat?.category}} </td>
+        <td> <img style="height: 60px; width: auto;" [src]="cat?.imageUrl" alt="" srcset=""> </td>
+        <td> {{cat?.capacity}} </td>
+        <td> {{cat?.model}} </td>
+        <td> {{cat?.rate}} </td>
+        <td> {{cat?.monthlySubscription}} </td>
+        <td> <ion-chip (click)="delete(cat._id)" color="primary" mode="ios" outline="true">
+          <ion-label>DELETE</ion-label>
+          <ion-icon name="trash"></ion-icon>
+        </ion-chip> </td>
+      </tr>
+    </table>
+  </div>
+</ion-content>

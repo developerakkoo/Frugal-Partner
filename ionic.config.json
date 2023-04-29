@@ -1,0 +1,7 @@
+{
+  "name": "partner-frugal",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
