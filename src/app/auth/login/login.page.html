@@ -1,0 +1,45 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Login to Frugal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+ <ion-grid>
+  <ion-row>
+    <ion-col sizeLg="6" sizeSm="12" sizeXs="12" offsetLg="3">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Please Login with mobile number</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-input type="number" placeholder="Enter your Mobile number" [(ngModel)]="number" maxlength="10" required="true"></ion-input>
+          <ion-button (click)="submit()" expand="block" fill="clear" shape="round">
+            Send OTP
+          </ion-button>
+          <ion-text color="dark" [routerLink]="['/register']">
+            <h6>Not Registered? Click here.</h6>
+          </ion-text>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col sizeLg="6" sizeXs="12" sizeSm="12" offsetLg="3" *ngIf="isOtp">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="8" offset="2">
+            <ng-otp-input class="ion-text-center" (onInputChange)="onOtpChange($event)"  [config]="{length:6}"></ng-otp-input>
+
+           <ion-text class="ion-text-center" color="primary">
+            <h6 *ngIf="!istimerEnd">{{timermsg}}{{otp}}</h6>
+            <h6 *ngIf="istimerEnd" (click)="resendOtp()">Resend OTP Again.</h6>
+
+           </ion-text>
+          </ion-col>
+          <ion-col size="6"></ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </ion-col>
+  </ion-row>
+ </ion-grid>
+</ion-content>

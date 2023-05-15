@@ -1,0 +1,36 @@
+  <div class="w3-container">
+            <button class="w3-button w3-green" (click)="addVehicleRow()">Add Vehicle +</button>
+            <button class="w3-button w3-red" (click)="removeVehicleRow()">Remove Vehicle -</button>
+            <div class="w3-table w3-responsive w3-border">
+              <tr>
+                <th>Category</th>
+                <th>Driver Mobile No</th>
+                <th>Vehicle No</th>
+                <th>RC</th>
+                <th>Driver Name</th>
+                <th>License</th>
+                <th>Police verification</th>
+                <th>Subscription</th>
+                <th>Subscription Ends On</th>
+                
+              </tr>
+
+              <tr *ngFor="let item of vehiclesRow">
+                <td>  <input type="text" name="" id="">  
+                </td>
+
+                <td>  <input type="text" name="" id="">  </td>
+                <td> <input type="text" name="" id="">  </td>
+                <!-- RC UPload  -->
+                <td> <input type="file" (change)="onRcFileEvent($event)" name="" id=""> </td>
+                <input type="text" name="" id="">  
+                <!-- License  -->
+                <td> <input type="file" (change)="onLicenseFileEvent($event)" name="" id=""></td>
+                <!-- Police Verify  -->
+                <td> <input type="file" (change)="onPoliceVerificationFileEvent($event)" name="" id=""> </td>
+                <td> <button class="w3-button w3-teal" (click)="purchaseSubscription(item)">Purchase</button> </td>
+                <td> 23-08-195 </td>
+              </tr>
+            
+            </div>
+          </div>

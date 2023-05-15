@@ -1,0 +1,72 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Register to Frugal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col sizeLg="12" sizeSm="12" sizeXs="12">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <ion-item>
+            <ion-label position="floating">Owner Mobile No <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input required formControlName="ownerMobile" type="number"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Name <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input required formControlName="name" type="text"></ion-input>
+          </ion-item>
+
+            <ion-item>
+            <ion-label position="floating">Address</ion-label>
+              <ion-textarea required formControlName="address" rows="3"></ion-textarea>
+            </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Adhar No<ion-text color="danger">*</ion-text></ion-label>
+            <br>
+            <ng-otp-input class="ion-text-center" (onInputChange)="onAdharChange($event)"  [config]="{length:12}"></ng-otp-input>
+       
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Pan No <ion-text color="danger">*</ion-text></ion-label>
+            <br>
+            <ng-otp-input class="ion-text-center"  (onInputChange)="onPanChange($event)"  [config]="{length:10}"></ng-otp-input>
+
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">GST <ion-text color="danger">*</ion-text></ion-label>
+            <br>
+            <ng-otp-input class="ion-text-center"  (onInputChange)="onGstChange($event)"  [config]="{length:15}"></ng-otp-input>
+
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Adhar Upload</ion-label>
+            <input type="file" name="file" (change)="onAdharFileEvent($event)" id="">
+
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Pan Upload</ion-label>
+            <input type="file" name="file" (change)="onPanFileEvent($event)" id="">
+
+          </ion-item>
+          <hr>
+          <br>
+
+        
+
+          <ion-button block color="primary" type="submit" [disabled]="form.invalid">
+            Register
+          </ion-button>
+        </form>
+      </ion-col>
+      <ion-col size="6"></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

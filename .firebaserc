@@ -1,0 +1,21 @@
+{
+  "targets": {
+    "consign-web": {
+      "hosting": {
+        "app": [
+          "partner-frugal-web-app"
+        ]
+      }
+    },
+    "consign-612af": {
+      "hosting": {
+        "app": [
+          "partner-frugal"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "consign-612af"
+  }
+}
