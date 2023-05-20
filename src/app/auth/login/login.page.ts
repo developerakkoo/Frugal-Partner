@@ -97,7 +97,7 @@ export class LoginPage implements OnInit {
       error:(error) =>{
         console.log(error);
         this.handler.dismissLoading();
-  
+        this.handler.presentToast("Error Logging You In!")
         
       }
   

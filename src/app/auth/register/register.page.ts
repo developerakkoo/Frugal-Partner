@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { HandlerService } from 'src/app/handler.service';
 import { environment } from 'src/environments/environment';
@@ -30,6 +31,7 @@ export class RegisterPage implements OnInit {
   postPartnerSub!:Subscription;
   constructor(private fb: FormBuilder,
               private handler: HandlerService,
+              private router: Router,
               private http: HttpClient) {
                 this.form = this.fb.group({
                   ownerMobile: [, [Validators.required, Validators.minLength(10)]],
@@ -99,6 +101,8 @@ export class RegisterPage implements OnInit {
       next:(value) =>{
         console.log(value);
         this.handler.dismissLoading();
+        this.handler.presentToast("Registration Complete")
+        this.router.navigate(['login']);
         
       },
       error:(error) =>{

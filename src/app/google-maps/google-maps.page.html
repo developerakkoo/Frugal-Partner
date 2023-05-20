@@ -8,5 +8,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div  #map id="map"  style="height: 100%; width: auto;"></div>
+  <div *ngIf="isLocationError == false"  #map id="map"  style="height: 100%; width: auto;"></div>
+  <ion-text *ngIf="isLocationError == true" class="ion-text-center" color="tertiary">
+    <h6> {{errorMessage | uppercase}} </h6>
+  </ion-text>
 </ion-content>

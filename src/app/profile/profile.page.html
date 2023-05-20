@@ -59,6 +59,9 @@
   <div class="w3-container" *ngIf="isVehicleView">
     <!-- <button class="w3-button w3-green" (click)="addVehicleRow()">Add Vehicle +</button> -->
     <!-- <button class="w3-button w3-red" (click)="removeVehicleRow()">Remove Vehicle -</button> -->
+    <ion-text *ngIf="vehiclesRow.length == 0" color="primary" class="ion-text-center">
+      <h4>No Drivers Registered!</h4>
+    </ion-text>
     <div class="w3-table w3-responsive w3-border" *ngIf="vehiclesRow.length > 0">
       <tr>
         <th>Category</th>
@@ -74,6 +77,7 @@
         <th>Police verification</th>
         <th>Subscription</th>
         <th>Subscription Ends On</th>
+        <th>ACTION</th>
         
       </tr>
 
@@ -89,7 +93,7 @@
 
        
         <td>  <input type="text" [value]="item.MobileNumber" name="" id="" > 
-          <button class="w3-blue w3-button w3-small" (click)="openGoogleMapsModel(item._id)" >TRACK</button>
+          <button class="w3-blue w3-button w3-small" (click)="openGoogleMapsModel(item._id)" [disabled]="item.CanPunchesSubscription === false">TRACK</button>
         </td>
         <td> <input type="text" [value]="item.VehicleNumber" name="" id="">  </td>
         <!-- RC UPload  -->
@@ -106,7 +110,11 @@
         <!-- Police Verify  -->
         <td> <a #pv target="_blank" [href]="item.PoliceVerification" download hidden></a>  <button class="w3-button w3-teal" (click)="pv.click()">View</button> </td>
         <td> <button  class="w3-button w3-red" (click)="purchaseSubscription(item.Rates, item._id)">Purchase</button> </td>
-        <td> {{item.subscriptionEndsOn}} </td>
+        <td> {{item.subscriptionEndsOn |date:"mediumDate"}} </td>
+
+        <td> <ion-button (click)="deleteVehicle(item._id)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-button> </td>
       </tr>
     
     </div>

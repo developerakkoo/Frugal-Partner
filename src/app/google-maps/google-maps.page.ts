@@ -16,7 +16,8 @@ export class GoogleMapsPage implements OnInit {
   Automarker:any;
   @ViewChild('map') mapView!: ElementRef;
 
-
+  errorMessage:string = "";
+  isLocationError: boolean = false;
 
   map: any;
 
@@ -41,9 +42,17 @@ export class GoogleMapsPage implements OnInit {
     this.http.get(environment.URL + `/App/api/v1/getById/vehicle/${this.value}`).subscribe({
       next:(value:any) =>{
         console.log(value);
-        this.lat = value['vehicle'][0]['coordinates'][0]
-        this.lng = value['vehicle'][0]['coordinates'][1]
-        this.getUserPosition();
+        if(value['vehicle'][0]['coordinates'].length != 1){
+          this.lat = value['vehicle'][0]['coordinates'][0]
+          this.lng = value['vehicle'][0]['coordinates'][1]
+          this.errorMessage = "";
+        this.isLocationError = false;
+          this.getUserPosition();
+        }
+       else{
+        this.errorMessage = "Driver Location not Turned On!";
+        this.isLocationError = true;
+       }
       },
       error:(error:any) =>{
         console.log(error);

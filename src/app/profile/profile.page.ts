@@ -1,4 +1,4 @@
-import { LoadingController, ModalController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { HandlerService } from '../handler.service';
@@ -30,6 +30,8 @@ export class ProfilePage implements OnInit {
   getVehicleSub!: Subscription;
   getProfileSub!: Subscription;
   getCategorySub!: Subscription;
+  deleteVehicleSub!: Subscription;
+  updateVehicleOwnerSub!: Subscription;
   createOrderSub!: Subscription;
 
   segmentName: string = "profile";
@@ -50,7 +52,8 @@ export class ProfilePage implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private modalController: ModalController,
-              private loadingCtrl: LoadingController
+              private loadingCtrl: LoadingController,
+              private alertController: AlertController
               ) {
                 this.form = this.fb.group({
                   mobile: [],
@@ -246,7 +249,30 @@ export class ProfilePage implements OnInit {
   }
 
   onSubmit(){
+    this.handler.presentLoading("Updating Profile...")
+    let body = {
+      name: this.form.value.name,
+      MobileNumber: this.form.value.mobile,
+      Address: this.form.value.address,
+      GSTNumber: this.form.value.gst,
+      PANNumber: this.form.value.pan,
+      ADHARNumber: this.form.value.adhar
+    }
+    this.updateVehicleOwnerSub = this.http.put(environment.URL+ `/App/api/v1/Update/owners/${this.partnerId}`, body)
+    .subscribe({
+      next:(value:any) =>{
+        console.log(value);
+        this.handler.dismissLoading();
+        this.handler.presentToast("Profile Updated Successfully!")
 
+        this.getPartnerProfile();
+      },
+      error:(error) =>{
+        console.log(error);
+        this.handler.dismissLoading();
+        this.handler.presentToast("Error Updating.")
+      }
+    })
   }
 
 
@@ -294,13 +320,60 @@ export class ProfilePage implements OnInit {
 
   }
 
+
+  async presentAlertConfirm(id:string) {
+    const alert = await this.alertController.create({
+      header: 'Confirm!',
+      message: 'Do you confirm to Remove Driver?!!!',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.handler.dismissLoading()
+;            this.deleteVehicleSub = this.http.delete(environment.URL + `/App/api/v1/Delete/vehicle/${id}`)
+            .subscribe({
+              next:(value:any) =>{
+                console.log(value);
+                this.handler.presentToast("Driver Removed Successfully");
+                this.handler.dismissLoading();
+                this.getPartnerVehicles();
+                
+              },
+              error:(error) =>{
+                console.log(error);
+                this.handler.dismissLoading();
+                this.handler.presentToast("Error Removing Driver!");
+                
+              }
+            })
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+  }
+  deleteVehicle(id:string){
+    console.log(id);
+    this.presentAlertConfirm(id);
+    
+  }
+
   subscriptionSuccess(id:any){
     this.http.put(environment.URL + `/App/api/v1/getSubscription`, {
       id: id
     }).subscribe({
       next:(value:any) =>{
         console.log(value);
-        
+        this.getPartnerVehicles();
       },
       error:(error:any) =>{
         console.log(error);
@@ -321,7 +394,7 @@ export class ProfilePage implements OnInit {
       // alert(response.error.description);
       // alert(response.error.source);
       // alert(response.error.step);
-      // alert(response.error.reason);
+      alert(response.error.reason);
       // alert(response.error.metadata.order_id);
       // alert(response.error.metadata.payment_id);
     });
