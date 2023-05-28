@@ -39,6 +39,14 @@ const routes: Routes = [
     path: 'google-maps',
     loadChildren: () => import('./google-maps/google-maps.module').then( m => m.GoogleMapsPageModule)
   },
+  {
+    path: 'set-pin/:id',
+    loadChildren: () => import('./set-pin/set-pin.module').then( m => m.SetPinPageModule)
+  },
+  {
+    path: 'enter-pin/:id',
+    loadChildren: () => import('./enter-pin/enter-pin.module').then( m => m.EnterPinPageModule)
+  },
 ];
 
 @NgModule({

@@ -92,7 +92,21 @@ export class LoginPage implements OnInit {
         // this.istimerEnd = false;
         this.handler.dismissLoading();
         let partnerId = value['id'];
-        this.router.navigate(['profile', partnerId]);
+        this.handler.get('pin').then((pin) =>{
+          console.log(pin);
+          if(pin == null){
+            console.log("PIN NOT SET");
+            this.router.navigate(['set-pin', partnerId]);
+            
+          }else{
+            this.router.navigate(['enter-pin', partnerId]);
+
+          }
+          
+        }).catch((error)=>{
+          console.log(error);
+          
+        })
       },
       error:(error) =>{
         console.log(error);

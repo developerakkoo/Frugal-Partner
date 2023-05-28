@@ -19,6 +19,7 @@ export class ProfilePage implements OnInit {
   partnerId:any;
 
   vehiclesRow: any[] = [];
+  vehiclesRowNotActive:any[] = [];
   categoryList: any[] = [];
   rcFile!:File;
   licenseFile!:File;
@@ -102,12 +103,37 @@ export class ProfilePage implements OnInit {
     })
   }
 
-  getPartnerVehicles(){
-    this.getVehicleSub =  this.http.get(environment.URL +`/App/api/v1/getVehicleByOwnerId/${this.partnerId}`)
+  getPartnerVehiclesActive(){
+    this.getVehicleSub =  this.http.get(environment.URL +`/getVehiclesByMonthlyActiveSubscription/vehicle/${this.partnerId}`)
     .subscribe({
       next:(value:any) =>{
         console.log(value);
-        this.vehiclesRow = value['vehicle'];
+        this.vehiclesRow = value['availableVehicles'];
+        this.getPartnerVehiclesNotActive();
+        
+      },
+      error:(error) =>{
+        console.log(error);
+
+        
+        
+      },
+      complete:() =>{
+        console.log("Get Profile Complete");
+        
+        
+      }
+    })
+  }
+
+  getPartnerVehiclesNotActive(){
+    this.getVehicleSub =  this.http.get(environment.URL +`/getVehiclesByMonthlyNotActiveSubscription/vehicle/${this.partnerId}`)
+    .subscribe({
+      next:(value:any) =>{
+        console.log("Not ACTIVE VEHICLES");
+        
+        console.log(value);
+        this.vehiclesRowNotActive = value['availableVehicles'];
         
       },
       error:(error) =>{
@@ -170,7 +196,7 @@ export class ProfilePage implements OnInit {
     }).subscribe({
       next:(value:any) =>{
         console.log(value);
-        this.getPartnerVehicles();
+        this.getPartnerVehiclesActive();
       },
       error:(error: any)=>{
         console.log(error);
@@ -209,7 +235,7 @@ export class ProfilePage implements OnInit {
     else if(ev.detail.value == "vehicles"){
       this.isProfileView = false;
       this.isVehicleView = true;
-      this.getPartnerVehicles();
+      this.getPartnerVehiclesActive();
       this.getCategory();
     }
     
@@ -344,7 +370,9 @@ export class ProfilePage implements OnInit {
                 console.log(value);
                 this.handler.presentToast("Driver Removed Successfully");
                 this.handler.dismissLoading();
-                this.getPartnerVehicles();
+                this.getPartnerVehiclesActive();
+        this.getPartnerVehiclesNotActive();
+
                 
               },
               error:(error) =>{
@@ -373,7 +401,9 @@ export class ProfilePage implements OnInit {
     }).subscribe({
       next:(value:any) =>{
         console.log(value);
-        this.getPartnerVehicles();
+        this.getPartnerVehiclesActive();
+        this.getPartnerVehiclesNotActive();
+
       },
       error:(error:any) =>{
         console.log(error);

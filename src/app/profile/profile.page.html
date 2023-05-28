@@ -1,6 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>My Profile</ion-title>
+    <ion-button slot="end" *ngIf="isVehicleView" class="ion-margin" (click)="getPartnerVehiclesActive()">
+      <ion-icon slot="icon-only" name="reload-circle"></ion-icon>
+    </ion-button>
     <ion-segment value="profile" (ionChange)="segmentChanged($event)">
       <ion-segment-button value="profile">
         <ion-label>Profile</ion-label>
@@ -9,7 +12,7 @@
         <ion-label>Vehicles</ion-label>
       </ion-segment-button>
     </ion-segment>
-    
+   
   </ion-toolbar>
 
 </ion-header>
@@ -62,6 +65,9 @@
     <ion-text *ngIf="vehiclesRow.length == 0" color="primary" class="ion-text-center">
       <h4>No Drivers Registered!</h4>
     </ion-text>
+    <ion-text color="primary">
+      <h1>Active Drivers</h1>
+    </ion-text>
     <div class="w3-table w3-responsive w3-border" *ngIf="vehiclesRow.length > 0">
       <tr>
         <th>Category</th>
@@ -84,6 +90,78 @@
       <tr *ngFor="let item of vehiclesRow">
         <td>
           <input disabled type="text" [value]="item.Category" id="">
+          <ion-item lines="none" *ngIf="item.Category.length == 0">
+            <ion-select  (ionChange)="categorySelectEvent($event, item._id)" [value]="item.Category" multiple="false" placeholder="Select Category">
+              <ion-select-option  *ngFor="let cat of categoryList" [value]="cat._id">{{cat.category}}</ion-select-option>
+            </ion-select>
+          </ion-item>  
+        </td>
+
+       
+        <td>  <input type="text" [value]="item.MobileNumber" name="" id="" > 
+          <button class="w3-blue w3-button w3-small" (click)="openGoogleMapsModel(item._id)" [disabled]="item.CanPunchesSubscription === false">TRACK</button>
+        </td>
+        <td> <input type="text" [value]="item.VehicleNumber" name="" id="">  </td>
+        <!-- RC UPload  -->
+        <td> <a #rc target="_blank" [href]="item.RC" download hidden></a>  <button class="w3-button w3-teal" (click)="rc.click()">View</button> </td>
+
+      <td>  <input disabled type="text" [value]="item.Capacity" name="" id="">  </td>
+      <td>  <input disabled type="text" [value]="item.ModelType" name="" id="">  </td>
+      <td>  <input  type="text"  name="" id="">
+        <button class="w3-blue w3-button w3-small">UPDATE</button>
+        </td>
+      <td>  <input disabled type="text" [value]="item.Rates" name="" id="">  </td>
+      <td>  <input type="text" [value]="item.DriverName" name="" id="">  </td>
+      
+        <!-- License  -->
+        <td>  <a #license target="_blank" [href]="item.License" download hidden></a>  <button class="w3-button w3-teal"  (click)="license.click()">View</button></td>
+        <!-- Police Verify  -->
+        <td> <a #pv target="_blank" [href]="item.PoliceVerification" download hidden></a>  <button class="w3-button w3-teal" (click)="pv.click()">View</button> </td>
+        <td> <button  class="w3-button w3-red" (click)="purchaseSubscription(item.Rates, item._id)">Purchase</button> </td>
+        <td> {{item.subscriptionEndsOn}} </td>
+
+        <td> <ion-button (click)="deleteVehicle(item._id)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-button> </td>
+      </tr>
+    
+    </div>
+  </div>
+
+
+  <!-- NOT ACTIVE VEHICLE DIV -->
+
+  <div class="w3-container" *ngIf="isVehicleView">
+    <!-- <button class="w3-button w3-green" (click)="addVehicleRow()">Add Vehicle +</button> -->
+    <!-- <button class="w3-button w3-red" (click)="removeVehicleRow()">Remove Vehicle -</button> -->
+    <ion-text *ngIf="vehiclesRow.length == 0" color="primary" class="ion-text-center">
+      <h4>No Drivers Registered!</h4>
+    </ion-text>
+    <ion-text color="primary">
+      <h1>InActive Drivers</h1>
+    </ion-text>
+    <div class="w3-table w3-responsive w3-border" *ngIf="vehiclesRowNotActive.length > 0">
+      <tr>
+        <th>Category</th>
+        <th>Driver Mobile No</th>
+        <th>Vehicle No</th>
+        <th>RC</th>
+        <th>CAPACITY</th>
+        <th>MODEL/TYPE</th>
+        <th>Rates</th>
+        <th>Monthly Subscription</th>
+        <th>Driver Name</th>
+        <th>License</th>
+        <th>Police verification</th>
+        <th>Subscription</th>
+        <th>Subscription Ends On</th>
+        <th>ACTION</th>
+        
+      </tr>
+
+      <tr *ngFor="let item of vehiclesRowNotActive">
+        <td>
+          <input disabled type="text" [value]="item.Category" id="">
           <ion-item lines="none">
             <ion-select  (ionChange)="categorySelectEvent($event, item._id)" [value]="item.Category" multiple="false" placeholder="Select Category">
               <ion-select-option  *ngFor="let cat of categoryList" [value]="cat._id">{{cat.category}}</ion-select-option>
@@ -101,8 +179,10 @@
 
       <td>  <input disabled type="text" [value]="item.Capacity" name="" id="">  </td>
       <td>  <input disabled type="text" [value]="item.ModelType" name="" id="">  </td>
-      <td>  <input  type="text"  name="" id="">  </td>
-      <td>  <input disabled type="text" [value]="item.Rates" name="" id="">  </td>
+      <td>  <input  type="text"  name="" id=""> 
+      </td>
+      <td>  <input disabled type="text" [value]="item.Rates" name="" id="">
+        </td>
       <td>  <input type="text" [value]="item.DriverName" name="" id="">  </td>
       
         <!-- License  -->
@@ -110,7 +190,7 @@
         <!-- Police Verify  -->
         <td> <a #pv target="_blank" [href]="item.PoliceVerification" download hidden></a>  <button class="w3-button w3-teal" (click)="pv.click()">View</button> </td>
         <td> <button  class="w3-button w3-red" (click)="purchaseSubscription(item.Rates, item._id)">Purchase</button> </td>
-        <td> {{item.subscriptionEndsOn |date:"mediumDate"}} </td>
+        <td> {{item.subscriptionEndsOn | date}} </td>
 
         <td> <ion-button (click)="deleteVehicle(item._id)">
           <ion-icon slot="icon-only" name="trash"></ion-icon>

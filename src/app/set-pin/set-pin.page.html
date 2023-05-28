@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Set You Login Pin</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" offset="3">
+  <ng-otp-input class="ion-text-center" (onInputChange)="pinSetEvent($event)"  [config]="{length:4,allowNumbersOnly: true}"></ng-otp-input>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+ 
+</ion-content>
