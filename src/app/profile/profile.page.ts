@@ -37,6 +37,7 @@ export class ProfilePage implements OnInit {
 
   segmentName: string = "profile";
 
+  OwnerRate!:string;
   Category!:string;
   Capacity!:string;
   MobileNumber!: string;
@@ -185,6 +186,31 @@ export class ProfilePage implements OnInit {
     
   }
 
+  updateVehicleOwnerRate(id:any, rate:any){
+    console.log(rate);
+    
+    this.http.put(environment.URL+ `/App/api/v1/updateVehicle/admin/${id}`, {
+      ownerRate: this.OwnerRate,
+      Capacity: this.Capacity,
+      Category: this.Category,
+      modelType: this.ModelType,
+      Rate: this.Rates,
+    }).subscribe({
+      next:(value:any) =>{
+        console.log(value);
+        this.getPartnerVehiclesActive();
+      },
+      error:(error: any)=>{
+        console.log(error);
+        
+      },
+      complete:() =>{
+        console.log("Update complete");
+        
+      }
+    })
+  }
+
   updateVehicle(id:any){
     console.log(identity);
     
@@ -192,7 +218,7 @@ export class ProfilePage implements OnInit {
       Capacity: this.Capacity,
       Category: this.Category,
       modelType: this.ModelType,
-      Rate: this.Rates
+      Rate: this.Rates,
     }).subscribe({
       next:(value:any) =>{
         console.log(value);

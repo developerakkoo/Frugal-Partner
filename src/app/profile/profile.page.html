@@ -107,8 +107,8 @@
 
       <td>  <input disabled type="text" [value]="item.Capacity" name="" id="">  </td>
       <td>  <input disabled type="text" [value]="item.ModelType" name="" id="">  </td>
-      <td>  <input  type="text"  name="" id="">
-        <button class="w3-blue w3-button w3-small">UPDATE</button>
+      <td>  <input #input [value]="item.ownerRate"   type="text"  name="" id="">
+        <button (click)="updateVehicleOwnerRate(item._id, input.value)" class="w3-blue w3-button w3-small">UPDATE</button>
         </td>
       <td>  <input disabled type="text" [value]="item.Rates" name="" id="">  </td>
       <td>  <input type="text" [value]="item.DriverName" name="" id="">  </td>
