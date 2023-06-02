@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { HandlerService } from '../handler.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-enter-pin',
@@ -12,6 +13,8 @@ export class EnterPinPage implements OnInit {
 
   pin!:string;
   partnerId:any;
+
+  getOtpSub!: Subscription;
   constructor(private handler: HandlerService,
               private alertController: AlertController,
               private route: ActivatedRoute,
@@ -22,6 +25,10 @@ export class EnterPinPage implements OnInit {
   ngOnInit() {
   }
 
+
+  ionViewDidLeave(){
+    this.getOtpSub.unsubscribe();
+  }
   pinSetEvent(ev:any){
     console.log(ev);
     if(ev.length == 4){
