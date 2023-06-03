@@ -23,15 +23,15 @@
     <ion-row>
       <ion-col sizeLg="6" offsetLg="3" sizeSm="12" sizeMd="12" sizeXs="12">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <ion-item disabled="true">
+          <ion-item [disabled]="isEditable">
             <ion-label position="floating">Name <ion-text color="danger">*</ion-text></ion-label>
             <ion-input  formControlName="name" type="text"></ion-input>
           </ion-item>
-          <ion-item>
+          <ion-item [disabled]="isEditable">
             <ion-label position="floating">Mobile Number <ion-text color="danger">*</ion-text></ion-label>
             <ion-input  formControlName="mobile" type="number"></ion-input>
           </ion-item>
-          <ion-item disabled="true"> 
+          <ion-item [disabled]="isEditable"> 
             <ion-label position="floating">GST <ion-text color="danger">*</ion-text></ion-label>
             <ion-input  formControlName="gst" type="text"></ion-input>
           </ion-item>
@@ -45,16 +45,30 @@
             <ion-input  formControlName="pan" type="text"></ion-input>
           </ion-item>
 
-            <ion-label position="floating">Address <ion-text color="danger">*</ion-text></ion-label>
-            <ion-item>
+          <ion-item [disabled]="isEditable">
+              <ion-label position="floating">Address <ion-text color="danger">*</ion-text></ion-label>
               <ion-textarea formControlName="address" type="text"></ion-textarea>
           </ion-item>
           <ion-button block color="primary" type="submit" [disabled]="form.invalid">
             Save
           </ion-button>
+
+         
         </form>
       </ion-col>
-      <ion-col size="6"></ion-col>
+      <ion-col size="6">
+        <a #license target="_blank" [href]="License" download hidden></a>  
+        <a #pan target="_blank" [href]="Pan" download hidden></a>  
+        <button class="w3-button w3-teal w3-margin-right"  (click)="license.click()">View Adhar Card</button>
+        <button class="w3-button w3-teal"  (click)="pan.click()">View Pan Card</button>
+        <button *ngIf="isReqSentForEditEnable === false" class="w3-button w3-blue w3-margin-top"  (click)="RequestAdminForEdit()">
+          Request Admin For Profile Edit
+        </button>
+
+        <ion-text color="primary" *ngIf="isReqSentForEditEnable === true" >
+          <p>Request Sent to Admin. Please wait for acceptance then you can edit once your profile.</p>
+        </ion-text>
+      </ion-col>
     </ion-row>
   </ion-grid>
 

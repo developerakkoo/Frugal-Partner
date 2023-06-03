@@ -18,6 +18,9 @@ export class ProfilePage implements OnInit {
 
   partnerId:any;
 
+  isEditable!:boolean ;
+  isReqSentForEditEnable!:boolean;
+
   vehiclesRow: any[] = [];
   vehiclesRowNotActive:any[] = [];
   categoryList: any[] = [];
@@ -46,6 +49,8 @@ export class ProfilePage implements OnInit {
   Rates!: string;
   subscriptionEndsOn!: string;
   DriverName!: string;
+  License!: string;
+  Pan!: string;
 
 
   constructor(private http: HttpClient,
@@ -54,7 +59,7 @@ export class ProfilePage implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private modalController: ModalController,
-              private loadingCtrl: LoadingController,
+    private loadingController: LoadingController,
               private alertController: AlertController
               ) {
                 this.form = this.fb.group({
@@ -91,6 +96,11 @@ export class ProfilePage implements OnInit {
         this.form.get("gst")?.setValue(value['Vowner'][0]['GSTNumber']);
         this.form.get("pan")?.setValue(value['Vowner'][0]['PANNumber']);
         this.form.get("adhar")?.setValue(value['Vowner'][0]['ADHARNumber']);
+        this.License = value['Vowner'][0]['ADHARCard']
+        this.Pan = value['Vowner'][0]['PANCard'];
+        this.isEditable = value['Vowner'][0]['isEditEnable'];
+        this.isReqSentForEditEnable = value['Vowner'][0]['isReqSentForEditEnable'];
+
         
       },
       error:(error) =>{
@@ -147,6 +157,22 @@ export class ProfilePage implements OnInit {
         console.log("Get Profile Complete");
         
         
+      }
+    })
+  }
+
+  RequestAdminForEdit(){
+    this.presentLoading();
+    this.http.put(environment.URL+ `/owner/SentForEditEnable`,{id: this.partnerId})
+    .subscribe({
+      next:(value:any) =>{
+        console.log(value);
+        this.loadingController.dismiss();
+        this.getPartnerProfile();
+      },
+      error:(error) =>{
+        console.log(error);
+        this.loadingController.dismiss();
       }
     })
   }
@@ -300,28 +326,36 @@ export class ProfilePage implements OnInit {
     this.router.navigate(['add-vehicle', this.partnerId]);
   }
 
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Loading...',
+    });
+    await loading.present();
+  }
   onSubmit(){
-    this.handler.presentLoading("Updating Profile...")
+    this.presentLoading();
     let body = {
       name: this.form.value.name,
       MobileNumber: this.form.value.mobile,
       Address: this.form.value.address,
       GSTNumber: this.form.value.gst,
       PANNumber: this.form.value.pan,
-      ADHARNumber: this.form.value.adhar
+      ADHARNumber: this.form.value.adhar,
+      isEditEnable: false
     }
     this.updateVehicleOwnerSub = this.http.put(environment.URL+ `/App/api/v1/Update/owners/${this.partnerId}`, body)
     .subscribe({
       next:(value:any) =>{
         console.log(value);
-        this.handler.dismissLoading();
+        this.loadingController.dismiss();
         this.handler.presentToast("Profile Updated Successfully!")
 
         this.getPartnerProfile();
       },
       error:(error) =>{
         console.log(error);
-        this.handler.dismissLoading();
+        this.loadingController.dismiss();
+        
         this.handler.presentToast("Error Updating.")
       }
     })
