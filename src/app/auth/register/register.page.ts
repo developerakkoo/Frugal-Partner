@@ -37,6 +37,7 @@ export class RegisterPage implements OnInit {
                   ownerMobile: [, [Validators.required, Validators.minLength(10)]],
                   name: [, [Validators.required]],
                   address: [, [Validators.required]],
+                  city: [, [Validators.required]],
                
                 })
                }
@@ -90,6 +91,7 @@ export class RegisterPage implements OnInit {
     formdata.append("name",this.form.value.name);
     formdata.append("MobileNumber", this.form.value.ownerMobile);
     formdata.append("Address", this.form.value.address);
+    formdata.append("City", this.form.value.city);
     formdata.append("ADHARNumber", this.adharNo);
     formdata.append("PANNumber", this.panNo);
     formdata.append("GSTNumber", this.gstNo);
