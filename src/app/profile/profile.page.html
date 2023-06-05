@@ -23,15 +23,15 @@
     <ion-row>
       <ion-col sizeLg="6" offsetLg="3" sizeSm="12" sizeMd="12" sizeXs="12">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <ion-item [disabled]="isEditable">
+          <ion-item [disabled]="!isEditable">
             <ion-label position="floating">Name <ion-text color="danger">*</ion-text></ion-label>
             <ion-input  formControlName="name" type="text"></ion-input>
           </ion-item>
-          <ion-item [disabled]="isEditable">
+          <ion-item [disabled]="!isEditable">
             <ion-label position="floating">Mobile Number <ion-text color="danger">*</ion-text></ion-label>
             <ion-input  formControlName="mobile" type="number"></ion-input>
           </ion-item>
-          <ion-item [disabled]="isEditable"> 
+          <ion-item [disabled]="!isEditable"> 
             <ion-label position="floating">GST <ion-text color="danger">*</ion-text></ion-label>
             <ion-input  formControlName="gst" type="text"></ion-input>
           </ion-item>
@@ -45,7 +45,7 @@
             <ion-input  formControlName="pan" type="text"></ion-input>
           </ion-item>
 
-          <ion-item [disabled]="isEditable">
+          <ion-item [disabled]="!isEditable">
               <ion-label position="floating">Address <ion-text color="danger">*</ion-text></ion-label>
               <ion-textarea formControlName="address" type="text"></ion-textarea>
           </ion-item>
@@ -61,8 +61,8 @@
         <a #pan target="_blank" [href]="Pan" download hidden></a>  
         <button class="w3-button w3-teal w3-margin-right"  (click)="license.click()">View Adhar Card</button>
         <button class="w3-button w3-teal"  (click)="pan.click()">View Pan Card</button>
-        <button *ngIf="isReqSentForEditEnable === false" class="w3-button w3-blue w3-margin-top"  (click)="RequestAdminForEdit()">
-          Request Admin For Profile Edit
+        <button *ngIf="isReqSentForEditEnable === false" class="w3-button w3-blue"  (click)="RequestAdminForEdit()">
+          Request Admin For Profile EditBavdhan
         </button>
 
         <ion-text color="primary" *ngIf="isReqSentForEditEnable === true" >

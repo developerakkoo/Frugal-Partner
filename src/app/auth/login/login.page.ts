@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 import { HandlerService } from 'src/app/handler.service';
 import { environment } from 'src/environments/environment';
 
@@ -22,6 +23,7 @@ export class LoginPage implements OnInit {
   timermsg:string ="Resend otp after: 00:";
   constructor(private router: Router,
               private handler: HandlerService,
+              private loadingController: LoadingController,
               private http: HttpClient) {
    }
 
@@ -33,6 +35,12 @@ export class LoginPage implements OnInit {
 
   }
 
+  async presentLoading(msg:string) {
+    const loading = await this.loadingController.create({
+      message: msg,
+    });
+    await loading.present();
+  }
   startTimer(){
     this.timer = setInterval(() =>{
       this.otp -= 1;
@@ -57,7 +65,7 @@ export class LoginPage implements OnInit {
       }).subscribe({
         next:(value:any) =>{
           console.log(value);
-          this.handler.dismissLoading();
+          
           let partnerId = value['userID'];
           this.router.navigate(['profile', partnerId]);
           
@@ -78,7 +86,7 @@ export class LoginPage implements OnInit {
   }
 
   submit(){
-    this.handler.presentLoading("Sending OTP...")
+    this.presentLoading("Sending OTP...");
     console.log(this.number);
   
 
@@ -90,7 +98,7 @@ export class LoginPage implements OnInit {
         console.log(value);
         // this.isOtp = true;
         // this.istimerEnd = false;
-        this.handler.dismissLoading();
+        this.loadingController.dismiss();
         let partnerId = value['id'];
         this.handler.get('pin').then((pin) =>{
           console.log(pin);
@@ -110,7 +118,7 @@ export class LoginPage implements OnInit {
       },
       error:(error) =>{
         console.log(error);
-        this.handler.dismissLoading();
+        this.loadingController.dismiss();
         this.handler.presentToast("Error Logging You In!")
         
       }
